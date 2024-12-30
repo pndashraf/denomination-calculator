@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Denomination Calculator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>      
+<body>
+  <div class="container">
+    <h1>Denomination Calculator</h1>
+    <form id="calculatorForm">
+        <label for="notes500">500 Notes:</label>
+        <input type="number" id="notes500" placeholder="Enter number of notes">
+        <br>
+        
+        <label for="notes200">200 Notes:</label>
+        <input type="number" id="notes200" placeholder="Enter number of notes">
+        <br>
+        
+        <label for="notes100">100 Notes:</label>
+        <input type="number" id="notes100" placeholder="Enter number of notes">
+        <br>
+        
+        <label for="notes50">50 Notes:</label>
+        <input type="number" id="notes50" placeholder="Enter number of notes">
+        <br>
+        
+        <label for="notes20">20 Notes:</label>
+        <input type="number" id="notes20" placeholder="Enter number of notes">
+        <br>
+        
+        <label for="notes10">10 Notes:</label>
+        <input type="number" id="notes10" placeholder="Enter number of notes">
+        <br>
+        
+        <button type="button" onclick="calculateTotal()">Calculate Total</button>
+    </form>
+    
+    <div id="result">
+      <h3>Calculation Result:</h3>
+      <table id="resultTable">
+        <thead>
+          <tr>
+            <th>Denomination</th>
+            <th>Number of Notes</th>
+            <th>Total Value</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Results will be inserted here -->
+        </tbody>
+      </table>
+      <p id="totalAmount">Total Amount: </p>
+    </div>
+  </div>
+  
+  <script>
+    // Function to calculate the total based on the input values
+    function calculateTotal() {
+        const notes500 = parseInt(document.getElementById("notes500").value) || 0;
+        const notes200 = parseInt(document.getElementById("notes200").value) || 0;
+        const notes100 = parseInt(document.getElementById("notes100").value) || 0;
+        const notes50 = parseInt(document.getElementById("notes50").value) || 0;
+        const notes20 = parseInt(document.getElementById("notes20").value) || 0;
+        const notes10 = parseInt(document.getElementById("notes10").value) || 0;
+
+        const denominations = [500, 200, 100, 50, 20, 10];
+        const noteCounts = [notes500, notes200, notes100, notes50, notes20, notes10];
+        let totalAmount = 0;
+
+        const resultTable = document.getElementById("resultTable").getElementsByTagName('tbody')[0];
+        resultTable.innerHTML = "";  // Clear any previous results
+
+        for (let i = 0; i < denominations.length; i++) {
+            if (noteCounts[i] > 0) {
+                const totalValue = denominations[i] * noteCounts[i];
+                totalAmount += totalValue;
+                const row = resultTable.insertRow();
+                const cell1 = row.insertCell(0);
+                const cell2 = row.insertCell(1);
+                const cell3 = row.insertCell(2);
+
+                cell1.textContent = denominations[i] + ' Notes';
+                cell2.textContent = noteCounts[i];
+                cell3.textContent = '₹' + totalValue.toLocaleString();
+            }
+        }
+
+        // Update total amount
+        document.getElementById("totalAmount").textContent = `Total Amount: ₹${totalAmount.toLocaleString()}`;
+    }
+
+    // Move cursor to the next input when Enter key is pressed
+    document.addEventListener('DOMContentLoaded', function () {
+        // Get all the input fields in an array
+        const inputs = document.querySelectorAll('input[type="number"]');
+
+        // Add an event listener for each input field
+        inputs.forEach((input, index) => {
+            input.addEventListener('keydown', function (event) {
+                if (event.key === 'Enter') {
+                    // Prevent form submission when Enter is pressed
+                    event.preventDefault();
+
+                    // Move focus to the next input
+                    if (inputs[index + 1]) {
+                        inputs[index + 1].focus();
+                    } else {
+                        // Trigger the calculation when Enter is pressed on the last input
+                        calculateTotal();
+                    }
+                }
+            });
+        });
+    });
+  </script>
+</body>
+</html>
